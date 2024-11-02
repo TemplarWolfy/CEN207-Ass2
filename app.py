@@ -23,9 +23,21 @@ def query_chatgpt(prompt):
     )
     return response['choices'][0]['message']['content'].strip()
 
+# Root endpoint for health check and CORS preflight response
+@app.route('/', methods=['GET', 'OPTIONS'])
+def home():
+    if request.method == 'OPTIONS':
+        # CORS preflight response for the root URL
+        return '', 200
+    return "AI Virtual Assistant is running!"
+
 # Route for handling user questions
-@app.route('/ask', methods=['POST'])
+@app.route('/ask', methods=['POST', 'OPTIONS'])
 def ask():
+    if request.method == 'OPTIONS':
+        # CORS preflight response for the /ask endpoint
+        return '', 200
+    
     # Get JSON data from the request
     data = request.get_json()
     user_question = data.get("question", "")
