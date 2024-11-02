@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import openai
@@ -7,7 +8,7 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS to allow cross-origin requests from the HTML client
 
 # Configure OpenAI API key
-openai.api_key = "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"
+openai.api_key = os.getenv("OPENAI_API_KEY")  # Use environment variable for API key
 
 # Function to query ChatGPT using gpt-3.5-turbo
 def query_chatgpt(prompt):
@@ -38,4 +39,5 @@ def ask():
 
 # Start the server
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.getenv("PORT", 5000))  # Use PORT environment variable or default to 5000
+    app.run(host='0.0.0.0', port=port)
